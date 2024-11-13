@@ -1,0 +1,167 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+h2 {
+    text-align: center;
+    padding: 5px 0;
+    margin: 0;
+}
+
+h3 {
+    text-align: center;
+    padding: 5px 0;
+    margin: 0;
+}
+
+h5 {
+    padding: 5px 0;
+    margin: 0;
+}
+
+input {
+    height: 16ㄴpx;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+option {
+    font-size: 14px;
+}
+
+select {
+    font-size: 14px;
+}
+
+.container {
+    flex: 1;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+}
+
+.preview-area,
+.controls-area {
+    flex: 1;
+    min-width: 300px;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.controls-area {
+    overflow-y: auto;
+}
+
+#svg-container {
+    width: 100%;
+    height: 100%;
+}
+
+.controls {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.layer-controls {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.layer-controls h4 {
+    margin-top: 0;
+}
+
+.form-group {
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+#generate-button {
+    display: block;
+    margin: 15px auto;
+    width: 98%;
+    padding: 3px;
+    background: #007BFF;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+#generate-button:hover {
+    background: #0056b3;
+}
+
+#svg-code {
+    height: 50px;
+    border: 1px solid #000000;
+    white-space: pre-wrap;
+    overflow: auto;
+    font-family: monospace;
+    font-size: 14px;
+    background: #f1f1f1;
+    padding: 5px;
+    box-sizing: border-box;
+    margin: 0 1%;
+}
+
+.toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+    transform: translateX(-50%);
+}
+
+.toast.show {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.5s 1.5s;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+/* 삼각형 입력 필드의 레이아웃 조정 */
+.triangle-fields .form-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.triangle-fields label {
+    flex: 1;
+    margin-right: 5px;
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SOLUM SVG Shape Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.1.2/svg.min.js"></script>
+    <link rel="stylesheet" href="./index.css">
+    <script defer src="./index.js"></script>
+</head>
+
+<body>
+    <h3>SOLUM SVG Shape Generator</h3>
+    <div class="container">
+        <div class="preview-area">
+            <h4>SVG Preview</h4>
+            <div id="svg-container"></div>
+        </div>
+        <div class="controls-area">
+            <div class="controls">
+                <div class="form-group">
+                    <label>Number of Layers:
+                        <select id="layer-count">
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                    </label>
+                </div>
+                <div id="layers-container">
+                    <!-- 레이어 컨트롤들이 동적으로 추가됩니다 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="svg-code"></div>
+    <button id="generate-button">SVG Copy</button>
+    <div id="toast" class="toast">Successfully copied to clipboard!</div>
+</body>
+
+</html>
