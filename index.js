@@ -38,6 +38,7 @@ function initializeLayers() {
                 strokeColor: '#606060',
                 strokeWidth: 1,
                 strokeStyle: 'solid',
+                zIndex: i, // zIndex 추가
                 // 원과 삼각형을 위한 속성들
                 radius: 25,
                 points: [[0, 0], [50, 0], [25, 50]]
@@ -61,6 +62,11 @@ function addLayerControls(layer) {
                     <option value="circle">Circle</option>
                     <option value="triangle">Triangle</option>
                 </select>
+            </label>
+        </div>
+        <div class="form-group">
+            <label>Z-index:
+                <input type="number" class="z-index" data-layer="${layer}" value="${layer}">
             </label>
         </div>
         <div class="form-group">
@@ -208,6 +214,8 @@ function addEventListenersToLayer(layerControl) {
                 layerProperties[layer].strokeWidth = parseInt(value) || 0;
             } else if (classList.contains('stroke-style')) {
                 layerProperties[layer].strokeStyle = value;
+            } else if (classList.contains('z-index')) {
+                layerProperties[layer].zIndex = parseInt(value) || 0;
             }
 
             updateSVG();
@@ -225,8 +233,17 @@ function updateSVG() {
     svgContainer.size(svgWidth, svgHeight);
     svgContainer.viewbox(0, 0, svgWidth, svgHeight);
 
+    // 레이어를 zIndex에 따라 정렬
+    const layersArray = [];
     for (let layer = 1; layer <= currentLayerCount; layer++) {
         const props = layerProperties[layer];
+        layersArray.push({ layerNumber: layer, props: props });
+    }
+    layersArray.sort((a, b) => a.props.zIndex - b.props.zIndex);
+
+    // 정렬된 순서대로 레이어 그리기
+    for (let item of layersArray) {
+        const props = item.props;
         if (props.visible) {
             let element;
             if (props.shape === 'rectangle') {
