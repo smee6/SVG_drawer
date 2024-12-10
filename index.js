@@ -70,7 +70,7 @@ function addLayerControls(layer) {
             </label>
         </div>
         <div class="form-group">
-            <label><input type="checkbox" class="layer-visible" data-layer="${layer}" checked> visible</label>
+            <label><input type="checkbox" class="layer-visible" data-layer="${layer}" checked> Visible</label>
         </div>
         <!-- 사각형 및 원의 입력 필드 -->
         <div class="rectangle-circle-fields">
@@ -275,6 +275,22 @@ function updateSVG() {
             }
 
             if (element) {
+                // 회전의 중심을 도형의 중앙으로 설정
+                let centerX, centerY;
+                if (props.shape === 'rectangle') {
+                    centerX = props.x + props.width / 2;
+                    centerY = props.y + props.height / 2;
+                } else if (props.shape === 'circle') {
+                    centerX = props.x;
+                    centerY = props.y;
+                } else if (props.shape === 'triangle') {
+                    // 삼각형의 경우 세 점의 평균을 중앙으로 설정
+                    const avgX = (props.points[0][0] + props.points[1][0] + props.points[2][0]) / 3;
+                    const avgY = (props.points[0][1] + props.points[1][1] + props.points[2][1]) / 3;
+                    centerX = props.x + avgX;
+                    centerY = props.y + avgY;
+                }
+
                 element.fill(props.fillColor)
                     .stroke({
                         color: props.strokeColor,
@@ -282,7 +298,7 @@ function updateSVG() {
                         dasharray: getStrokeStyle(props.strokeStyle)
                     })
                     .opacity(props.opacity) // 투명도 적용
-                    .rotate(props.rotation, props.x + props.width / 2, props.y + props.height / 2); // 회전 적용
+                    .rotate(props.rotation, centerX, centerY); // 회전 적용
             }
         }
     });
@@ -292,9 +308,12 @@ function updateSVG() {
 
 function getStrokeStyle(style) {
     switch (style) {
-        case 'dotted': return '1,3';
-        case 'dashed': return '5,5';
-        default: return '';
+        case 'dotted':
+            return '1,3';
+        case 'dashed':
+            return '5,5';
+        default:
+            return '';
     }
 }
 

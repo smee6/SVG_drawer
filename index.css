@@ -1,133 +1,163 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    height: 100vh;
+/* 전체 배경을 흐릿하게 설정하기 위한 별도의 요소 */
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #e0e0e0;
+    /* 흐릿한 회색 배경 */
+    background-image: url('https://via.placeholder.com/1500');
+    /* 원하는 배경 이미지로 변경 가능 */
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px);
+    z-index: -1;
+    /* 콘텐츠 뒤에 배치 */
+}
+
+/* 콘텐츠를 중앙에 배치하고 흐릿한 배경과 구분 */
+.content {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
-}
-
-h2 {
-    text-align: center;
-    padding: 5px 0;
-    margin: 0;
-}
-
-h3 {
-    text-align: center;
-    padding: 5px 0;
-    margin: 0;
-}
-
-h4 {
-    margin-top: 0;
-}
-
-h5 {
-    padding: 5px 0;
-    margin: 0;
-}
-
-input {
-    height: 16px;
-    font-size: 14px;
+    align-items: center;
+    padding: 20px;
     box-sizing: border-box;
+    min-height: 100vh;
+    overflow: hidden;
 }
 
-option {
-    font-size: 14px;
+/* 컨테이너를 중앙에 배치하기 위해 새로운 래퍼 추가 */
+.container-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-wrap: nowrap;
+    background: #ffffff;
+    /* 불투명한 흰색 배경 */
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    margin-bottom: 20px;
+    /* SVG 코드와 버튼과의 간격 */
+    height: 80vh;
+    /* 전체 화면 높이의 80% */
 }
 
-select {
-    font-size: 14px;
-}
-
+/* 기존 .container 스타일 조정 */
 .container {
     flex: 1;
     display: flex;
     flex-wrap: nowrap;
     overflow: hidden;
+    height: 100%;
 }
 
+/* .preview-area와 .controls-area의 배경 및 여백 조정 */
 .preview-area,
 .controls-area {
     flex: 1;
     min-width: 300px;
     padding: 20px;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background: #ffffff;
+    /* 불투명한 흰색 배경 */
+    border-radius: 8px;
+    margin: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.controls-area {
-    overflow-y: auto;
+/* 프리뷰 영역 내부 스타일 조정 */
+.preview-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f9f9f9;
+    /* 약간 더 어두운 배경 */
+    position: relative;
 }
 
+/* SVG 컨테이너 스타일 */
 #svg-container {
     width: 100%;
+    height: 400px;
+    /* 고정 높이 설정 */
+    background: #ffffff;
+    /* SVG 작업 영역 배경 흰색 */
+    border: 1px dashed #cccccc;
+    /* 작업 영역 테두리 */
+    border-radius: 6px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+/* .controls-area 내부 레이아웃 조정 */
+.controls-area {
+    display: flex;
+    flex-direction: column;
     height: 100%;
 }
 
-.controls {
-    max-width: 400px;
-    margin: 0 auto;
+/* #layers-container에 스크롤 추가 */
+#layers-container {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 10px;
+    max-height: 100%;
+    /* 부모 요소의 높이에 맞추기 */
 }
 
-.layer-controls {
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-.layer-controls h5 {
-    margin-top: 0;
-}
-
-.form-group {
-    font-size: 12px;
-    margin-bottom: 8px;
-}
-
-#generate-button {
-    display: block;
-    margin: 15px auto;
-    width: 98%;
-    padding: 3px;
-    background: #007BFF;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    font-size: 12px;
-    border-radius: 4px;
-}
-
-#generate-button:hover {
-    background: #0056b3;
-}
-
+/* 기타 요소들 (버튼, 코드 박스 등) 중앙 정렬 유지 */
 #svg-code {
-    height: 50px;
+    height: 100px;
+    /* 높이 증가 */
     border: 1px solid #000000;
     white-space: pre-wrap;
     overflow: auto;
     font-family: monospace;
     font-size: 14px;
     background: #f1f1f1;
-    padding: 5px;
+    padding: 10px;
     box-sizing: border-box;
-    margin: 0 1%;
+    margin: 10px auto 0 auto;
+    width: 98%;
+    border-radius: 4px;
 }
 
+#generate-button {
+    display: block;
+    margin: 15px auto;
+    width: 98%;
+    padding: 10px;
+    background: #007BFF;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+#generate-button:hover {
+    background: #0056b3;
+}
+
+/* Toast 메시지 위치 조정 */
 .toast {
     visibility: hidden;
     min-width: 250px;
     background-color: #333;
     color: #fff;
     text-align: center;
-    border-radius: 2px;
+    border-radius: 4px;
     padding: 16px;
     position: fixed;
-    z-index: 1;
+    z-index: 1000;
+    /* 다른 요소들 위에 표시 */
     left: 50%;
     bottom: 30px;
     font-size: 17px;
@@ -168,4 +198,83 @@ select {
 .triangle-fields label {
     flex: 1;
     margin-right: 5px;
+}
+
+/* 스크롤바 스타일 (선택 사항) */
+.preview-area::-webkit-scrollbar,
+.controls-area::-webkit-scrollbar,
+#layers-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.preview-area::-webkit-scrollbar-thumb,
+.controls-area::-webkit-scrollbar-thumb,
+#layers-container::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.preview-area::-webkit-scrollbar-track,
+.controls-area::-webkit-scrollbar-track,
+#layers-container::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+
+/* 제목 스타일 조정 */
+.content h3 {
+    margin-bottom: 20px;
+}
+
+.content h4 {
+    margin-bottom: 10px;
+}
+
+.layer-controls h5 {
+    margin-top: 0;
+}
+
+/* 레이어 컨트롤 스타일 */
+.layer-controls {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #fafafa;
+}
+
+.form-group {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+input[type="number"],
+input[type="color"],
+select {
+    margin-left: 10px;
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .container-wrapper {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .preview-area,
+    .controls-area {
+        min-width: 100%;
+        margin: 10px 0;
+    }
+
+    #svg-container {
+        height: 300px;
+    }
 }
