@@ -340,5 +340,4 @@ function showToast(message) {
     }, 2000);
 }
 
-// 초기화
 initializeLayers();
