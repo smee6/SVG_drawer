@@ -7,28 +7,25 @@ let layerProperties = {};
 let currentLayerCount = 1;
 
 function initializeLayers() {
-    // 기존 레이어 컨트롤 요소들
+    // 기존 레이어 컨트롤 요소들 제거
     const existingControls = layersContainer.querySelectorAll('.layer-controls');
     existingControls.forEach(control => {
         const layer = parseInt(control.getAttribute('data-layer'));
         if (layer > currentLayerCount) {
             control.remove();
-            delete layerProperties[layer]; // layerProperties에서 해당 레이어 제거
+            delete layerProperties[layer];
         }
     });
 
     // 레이어 컨트롤 및 프로퍼티 추가
     for (let i = 1; i <= currentLayerCount; i++) {
-        // 레이어 컨트롤이 존재하는지 확인
         let control = layersContainer.querySelector(`.layer-controls[data-layer="${i}"]`);
         if (!control) {
-            // 레이어 컨트롤 추가
             addLayerControls(i);
         }
         if (!layerProperties[i]) {
-            // 새로운 레이어의 경우 기본값 설정
             layerProperties[i] = {
-                shape: 'rectangle', // 기본 도형은 사각형
+                shape: 'rectangle',
                 visible: true,
                 width: 100,
                 height: 50,
@@ -38,9 +35,12 @@ function initializeLayers() {
                 strokeColor: '#606060',
                 strokeWidth: 1,
                 strokeStyle: 'solid',
-                zIndex: i, // zIndex 추가
+                zIndex: i,
+                // 추가된 속성
+                opacity: 1,
+                rotation: 0,
                 // 원과 삼각형을 위한 속성들
-                radius: 25,
+                radius: 0,
                 points: [[0, 0], [50, 0], [25, 50]]
             };
         }
@@ -75,16 +75,20 @@ function addLayerControls(layer) {
         <!-- 사각형 및 원의 입력 필드 -->
         <div class="rectangle-circle-fields">
             <div class="form-group">
-                <label>width: <input type="number" class="width" data-layer="${layer}" value="100"></label>
+                <label>Width: <input type="number" class="width" data-layer="${layer}" value="100"></label>
             </div>
             <div class="form-group">
-                <label>height: <input type="number" class="height" data-layer="${layer}" value="50"></label>
+                <label>Height: <input type="number" class="height" data-layer="${layer}" value="50"></label>
             </div>
             <div class="form-group">
                 <label>X pos: <input type="number" class="x-position" data-layer="${layer}" value="${(layer - 1) * 10}"></label>
             </div>
             <div class="form-group">
                 <label>Y pos: <input type="number" class="y-position" data-layer="${layer}" value="${(layer - 1) * 10}"></label>
+            </div>
+            <!-- 추가된 모서리 반경 입력 필드 -->
+            <div class="form-group">
+                <label>Radius: <input type="number" class="radius" data-layer="${layer}" value="0"></label>
             </div>
         </div>
         <!-- 원의 입력 필드 -->
@@ -116,22 +120,30 @@ function addLayerControls(layer) {
         </div>
         <!-- 공통 스타일 입력 필드 -->
         <div class="form-group">
-            <label>fill color: <input type="color" class="fill-color" data-layer="${layer}" value="#f1f1f1"></label>
+            <label>Fill color: <input type="color" class="fill-color" data-layer="${layer}" value="#f1f1f1"></label>
         </div>
         <div class="form-group">
-            <label>border color: <input type="color" class="stroke-color" data-layer="${layer}" value="#606060"></label>
+            <label>Border color: <input type="color" class="stroke-color" data-layer="${layer}" value="#606060"></label>
         </div>
         <div class="form-group">
-            <label>border width: <input type="number" class="stroke-width" data-layer="${layer}" value="1"></label>
+            <label>Border width: <input type="number" class="stroke-width" data-layer="${layer}" value="1"></label>
         </div>
         <div class="form-group">
-            <label>border style:
+            <label>Border style:
                 <select class="stroke-style" data-layer="${layer}">
-                    <option value="solid">plain</option>
-                    <option value="dotted">dot</option>
-                    <option value="dashed">dash</option>
+                    <option value="solid">Solid</option>
+                    <option value="dotted">Dotted</option>
+                    <option value="dashed">Dashed</option>
                 </select>
             </label>
+        </div>
+        <!-- 추가된 투명도 입력 필드 -->
+        <div class="form-group">
+            <label>Opacity: <input type="number" step="0.1" min="0" max="1" class="opacity" data-layer="${layer}" value="1"></label>
+        </div>
+        <!-- 추가된 회전 입력 필드 -->
+        <div class="form-group">
+            <label>Rotation (deg): <input type="number" class="rotation" data-layer="${layer}" value="0"></label>
         </div>
     `;
     layersContainer.appendChild(layerControl);
@@ -216,6 +228,10 @@ function addEventListenersToLayer(layerControl) {
                 layerProperties[layer].strokeStyle = value;
             } else if (classList.contains('z-index')) {
                 layerProperties[layer].zIndex = parseInt(value) || 0;
+            } else if (classList.contains('opacity')) {
+                layerProperties[layer].opacity = parseFloat(value) || 1;
+            } else if (classList.contains('rotation')) {
+                layerProperties[layer].rotation = parseFloat(value) || 0;
             }
 
             updateSVG();
@@ -226,7 +242,7 @@ function addEventListenersToLayer(layerControl) {
 function updateSVG() {
     svgContainer.clear();
 
-    // 첫 번째 레이어의 크기를 전체 SVG 크기로 설정
+    // 전체 SVG 크기 설정 (첫 번째 레이어 기준)
     const firstLayer = layerProperties[1];
     const svgWidth = firstLayer.width || firstLayer.radius * 2 || 200;
     const svgHeight = firstLayer.height || firstLayer.radius * 2 || 200;
@@ -242,13 +258,14 @@ function updateSVG() {
     layersArray.sort((a, b) => a.props.zIndex - b.props.zIndex);
 
     // 정렬된 순서대로 레이어 그리기
-    for (let item of layersArray) {
+    layersArray.forEach(item => {
         const props = item.props;
         if (props.visible) {
             let element;
             if (props.shape === 'rectangle') {
                 element = svgContainer.rect(props.width, props.height)
-                    .move(props.x, props.y);
+                    .move(props.x, props.y)
+                    .radius(props.radius); // 모서리 반경 적용
             } else if (props.shape === 'circle') {
                 element = svgContainer.circle(props.radius * 2)
                     .move(props.x - props.radius, props.y - props.radius);
@@ -256,14 +273,19 @@ function updateSVG() {
                 const points = props.points.map(point => point.join(',')).join(' ');
                 element = svgContainer.polygon(points);
             }
-            element.fill(props.fillColor)
-                .stroke({
-                    color: props.strokeColor,
-                    width: props.strokeWidth,
-                    dasharray: getStrokeStyle(props.strokeStyle)
-                });
+
+            if (element) {
+                element.fill(props.fillColor)
+                    .stroke({
+                        color: props.strokeColor,
+                        width: props.strokeWidth,
+                        dasharray: getStrokeStyle(props.strokeStyle)
+                    })
+                    .opacity(props.opacity) // 투명도 적용
+                    .rotate(props.rotation, props.x + props.width / 2, props.y + props.height / 2); // 회전 적용
+            }
         }
-    }
+    });
 
     svgCodeEl.textContent = svgContainer.svg();
 }
@@ -286,7 +308,7 @@ document.getElementById('generate-button').addEventListener('click', () => {
     navigator.clipboard.writeText(svgCode).then(() => {
         showToast('Successfully copied to clipboard!');
     }).catch(err => {
-        console.error('fail: ', err);
+        console.error('Failed to copy: ', err);
     });
 });
 
