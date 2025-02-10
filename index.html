@@ -7,9 +7,9 @@
     <meta name="description" content="SVG Shelf Generator">
     <meta name="author" content="SOLUM">
     <!-- SVG.js 라이브러리 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.1.2/svg.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.1.2/svg.min.js" defer></script>
     <link rel="stylesheet" href="./index.css">
-    <script defer src="./index.js"></script>
+    <script src="./index.js" defer></script>
 </head>
 
 <body>
@@ -25,23 +25,21 @@
                 <div class="controls-area">
                     <div class="controls">
                         <div class="form-group">
-                            <label>Number of Layers:
-                                <select id="layer-count">
-                                    <option value="1" selected>1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
-                                </select>
-                            </label>
+                            <label for="layer-count">Number of Layers:</label>
+                            <select id="layer-count">
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
                         </div>
-                        <div id="layers-container">
-                        </div>
+                        <div id="layers-container"></div>
                     </div>
                 </div>
             </div>
